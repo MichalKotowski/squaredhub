@@ -1,0 +1,40 @@
+services:
+  web:
+    container_name: server
+    build: ./server
+    command: npm run dev
+    volumes:
+      - ./server/index.js:/usr/app/index.js
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    stdin_open: true
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=database
+      - CHOKIDAR_USEPOLLING=true
+
+  db:
+    container_name: postgresdb
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    # volumes:
+    #   - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  ui:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=mzkotowski@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=password
