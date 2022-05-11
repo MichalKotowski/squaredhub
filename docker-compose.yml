@@ -5,6 +5,7 @@ services:
     command: npm run dev
     volumes:
       - ./server/index.js:/usr/app/index.js
+      - ./server/src/:/usr/app/src/
     ports:
       - "4000:4000"
     depends_on:

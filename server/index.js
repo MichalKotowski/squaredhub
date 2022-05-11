@@ -1,20 +1,23 @@
-const app = require('express')()
-const cors = require('cors')
 require('dotenv').config()
-const { Client } = require('pg')
 
-const PORT = 4000
+const express = require('express')
+const cors = require('cors')
+const db = require('./src/queries')
+
+const app = express()
+
+const port = 4000
 
 app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-app.get('/', async (req, res) => {
-	const client = new Client()
-	await client.connect()
-	const data = await client.query('SELECT * from devices;')
-	res.send(data.rows)
-	await client.end()
-})
+app.get('/activities', db.getActivities)
+app.get('/activities/:id', db.getActivityById)
+app.post('/activities', db.createActivity)
+app.put('/activities/:id', db.updateActivity)
+app.delete('/activities/:id', db.removeActivity)
 
-app.listen(PORT, () => {
-	console.log("listening to port: " + PORT);
+app.listen(port, () => {
+	console.log(`listening to port: ${port}`);
 })
