@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import Activity from './Activity'
 import axios from 'axios'
-import * as style from './style.module.scss'
+import { SketchPicker } from 'react-color'
+import style from './style.module.scss'
 
 const Activities = () => {
 	const [ activities, setActivities ] = useState([])
@@ -30,28 +32,12 @@ const Activities = () => {
 		})
 	}
 
-	const handleRemoval = async (event, id) => {
-		event.preventDefault()
-
-		await axios.delete(`activities/${id}`).then(response => {
-			getActivities()
-			console.log(response)
-		}).catch(error => {
-			console.log(error)
-		})
-	}
-
 	return (
 		<>
-			<div>
-				<ol>
-					{activities.map(singleActivity => (
-						<li key={singleActivity.activity_id}>
-							<p>{singleActivity.name}</p>
-							<button onClick={event => handleRemoval(event, singleActivity.activity_id)}>Remove</button>
-						</li>
-					))}
-				</ol>
+			<div className={style.activitiesWrapper}>
+				{activities.map(singleActivity => (
+					<Activity data={singleActivity} getActivities={getActivities}/>
+				))}
 			</div>
 			<form onSubmit={handleSubmit}>
 				<label>
