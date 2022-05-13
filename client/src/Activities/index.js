@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Activity from './Activity'
 import axios from 'axios'
-import { SketchPicker } from 'react-color'
 import style from './style.module.scss'
 
 const Activities = () => {
