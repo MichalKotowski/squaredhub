@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import * as style from './style.module.scss'
 
 const Events = () => {
 	const [ events, setEvents ] = useState([])
 
-	const listStoredEvents = () => {
-		let events = []
-		let keys = Object.keys(localStorage).sort((a, b) => b > a)
-
-		keys.forEach(key => {
-			let eventData = localStorage.getItem(key)
-			events.push(JSON.parse(eventData))
-		})
-
-		return events
+	const getEvents = async () => {
+		const response = await axios.get('events')
+		setEvents(response.data)
 	}
 
 	useEffect(() => {
-		setEvents(listStoredEvents())
-
-		window.addEventListener('storage', () => {
-			setEvents(listStoredEvents())
-		})
+		getEvents()
 	}, [])
 
+	// Check Redux in order to centralize application's state
 
 	return (
-		<div>
-			{events.map(el => <p>You spent {el.time} seconds doing {el.name}</p>)}
-		</div>
+		<ol>
+			{events.map(event => (
+				<li key={event.id}>You spent {event.time_spent} seconds doing {event.name}</li>
+			))}
+		</ol>
 	)
 }
 

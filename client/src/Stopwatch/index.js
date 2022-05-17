@@ -1,13 +1,15 @@
 import React from 'react'
 import * as style from './style.module.scss'
+import axios from 'axios'
 
 class Stopwatch extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			task: '',
+			activity: '',
 			isActive: false,
-			timer: 0
+			timer: 0,
+			activities: []
 		}
 
 		this.countRef = React.createRef()
@@ -31,27 +33,28 @@ class Stopwatch extends React.Component {
 		})
 	}
 
-	handleSubmit = () => {
+	handleSubmit = async () => {
 		clearInterval(this.countRef.current)
 
-		let finishedTask = {
-			'name': this.state.task,
-			'time': this.state.timer
-		}
-
-		localStorage.setItem(Date.now(), JSON.stringify(finishedTask))
-		window.dispatchEvent(new Event('storage'))
-
-		this.setState({
-			task: '',
-			isActive: false,
-			timer: 0
+		await axios.post('/events', {
+			id: this.state.activity,
+			date: new Date().toISOString().slice(0, 10),
+			time: this.state.timer
+		}).then(response => {
+			this.setState({
+				activity: '',
+				isActive: false,
+				timer: 0
+			})
+			console.log(response)
+		}).catch(error => {
+			console.log(error)
 		})
 	}
 
-	updateTaskName = event => {
+	handleCurrentActivity = event => {
 		this.setState({
-			task: event.target.value
+			activity: event.target.value
 		})
 	}
 
@@ -66,8 +69,19 @@ class Stopwatch extends React.Component {
 		return `${getHours} : ${getMinutes} : ${getSeconds}`
 	}
 
+	getActivities = async () => {
+		const response = await axios.get('activities')
+		this.setState({
+			activities: response.data
+		})
+	}
+
+	componentDidMount() {
+		this.getActivities()
+	}
+
 	render() {
-		const { task, isActive, timer } = this.state
+		const { activity, isActive, timer, activities } = this.state
 
 		return (
 			<>
@@ -75,7 +89,12 @@ class Stopwatch extends React.Component {
 				<div>
 					<div>{this.formatTime()}</div>
 					<div>
-						<input type='text' placeholder='Task' value={task} onChange={event => this.updateTaskName(event)} />
+						<select value={activity} onChange={this.handleCurrentActivity}>
+							<option value='' default></option>
+							{activities.map(singleActivity => (
+								<option key={singleActivity.id} value={singleActivity.id}>{singleActivity.name}</option>
+							))}
+						</select>
 						<button onClick={this.handleStart} disabled={isActive}>Start</button>
 						<button onClick={this.handlePause} disabled={!isActive}>Pause</button>
 						<button onClick={this.handleSubmit} disabled={timer === 0}>Submit</button>
