@@ -50,7 +50,7 @@ const Activity = ({ data, getActivities }) => {
 	}
 
 	return (
-		<div key={data.id} className={style.activity}>
+		<div className={style.activity}>
 			<div className={style.activityColor} style={{backgroundColor: color}} onClick={() => setColorPickerVisibility(!isColorPickerVisible)}>
 				{ isColorPickerVisible ?
 					<>

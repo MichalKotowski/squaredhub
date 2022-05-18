@@ -35,7 +35,7 @@ const Activities = () => {
 		<>
 			<div className={style.activitiesWrapper}>
 				{activities.map(singleActivity => (
-					<Activity data={singleActivity} getActivities={getActivities}/>
+					<Activity key={singleActivity.id} data={singleActivity} getActivities={getActivities}/>
 				))}
 			</div>
 			<form onSubmit={handleSubmit}>

@@ -1,8 +1,7 @@
-import Stopwatch from './Stopwatch'
-import Events from './Events'
-import Activities from './Activities'
-
-import Layout from './Layout'
+import Stopwatch from './components/Stopwatch'
+import Events from './components/Events'
+import Activities from './components/Activities'
+import Layout from './components/Layout'
 import { Routes, Route } from 'react-router-dom'
 
 const App = () => {
