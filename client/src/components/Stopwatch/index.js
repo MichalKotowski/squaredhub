@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../store/slices/events.js'
 import { fetchActivities, activitiesSelector } from '../../store/slices/activities.js'
-import * as style from './style.module.scss'
 import axios from 'axios'
+import * as style from './style.module.scss'
 
 const Stopwatch = () => {
 	const dispatch = useDispatch()

@@ -18,6 +18,9 @@ app.post('/activities', db.createActivity)
 app.put('/activities/:id', db.updateActivity)
 app.delete('/activities/:id', db.removeActivity)
 
+app.get('/events', db.getEvents)
+app.post('/events', db.submitEvent)
+
 app.listen(port, () => {
 	console.log(`listening to port: ${port}`);
 })

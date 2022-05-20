@@ -27,7 +27,7 @@ const createActivity = async (request, response) => {
 		if (error) {
 			throw error
 		}
-		response.status(201).send(`Added device with id: ${result.rows[0].id}`)
+		response.status(201).send(`Added activity with id: ${result.rows[0].id}`)
 	})
 }
 
@@ -54,10 +54,32 @@ const removeActivity = async (request, response) => {
 	}
 }
 
+const getEvents = async (request, response) => {
+	try {
+		const { rows } = await pool.query('SELECT activities_log.id, activities_log.activity_id, activities_log.time_spent, activities.name, activities.color from activities_log, activities WHERE activities_log.activity_id = activities.id')
+		response.status(200).json(rows)
+	} catch (error) {
+		throw error
+	}
+}
+
+const submitEvent = async (request, response) => {
+	const { id, date, time } = request.body
+
+	await pool.query('INSERT INTO activities_log (user_id, activity_id, date_logged, time_spent) VALUES (1, $1, $2, $3) RETURNING id', [id, date, time], (error, result) => {
+		if (error) {
+			throw error
+		}
+		response.status(201).send(`Logged activity with id: ${result.rows[0].id}`)
+	})
+}
+
 module.exports = {
 	getActivities,
 	getActivityById,
 	createActivity,
 	updateActivity,
-	removeActivity
+	removeActivity,
+	getEvents,
+	submitEvent
 }
