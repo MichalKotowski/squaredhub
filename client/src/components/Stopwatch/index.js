@@ -1,41 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../store/slices/events.js'
 import { fetchActivities, activitiesSelector } from '../../store/slices/activities.js'
+import { timerSelector, setActivity, tick, setActive, resetTimer } from '../../store/slices/timer.js'
+import { formatTime } from '../../utils'
+import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
 import * as style from './style.module.scss'
 
+let timerInterval
+
 const Stopwatch = () => {
 	const dispatch = useDispatch()
-	const [ activity, setActivity ] = useState('')
-	const [ isActive, setActive ] = useState(false)
-	const [ timer, setTimer ] = useState(0)
 	const { activities, loading, hasErrors } = useSelector(activitiesSelector)
-	const countRef = useRef(null)
+	const { activity, timer, isActive } = useSelector(timerSelector)
 
 	const handleStart = () => {
-		countRef.current = setInterval(() => {
-			setTimer(timer => timer + 1)
+		dispatch(setActive(true))
+		timerInterval = setDriftlessInterval(() => {
+			dispatch(tick())
 		}, 1000)
-		setActive(true)
 	}
 
 	const handlePause = () => {
-		clearInterval(countRef.current)
-		setActive(false)
+		dispatch(setActive(false))
+		clearDriftless(timerInterval)
 	}
 
 	const handleSubmit = async () => {
-		clearInterval(countRef.current)
-
 		await axios.post('/events', {
 			id: activity,
 			date: new Date().toISOString().slice(0, 10),
 			time: timer
 		}).then(response => {
-			setActivity('')
-			setActive(false)
-			setTimer(0)
+			dispatch(setActive(false))
+			clearDriftless(timerInterval)
+			dispatch(resetTimer())
 			dispatch(fetchEvents())
 			console.log(response)
 		}).catch(error => {
@@ -44,18 +44,7 @@ const Stopwatch = () => {
 	}
 
 	const handleCurrentActivity = event => {
-		setActivity(event.target.value)
-	}
-
-	const formatTime = () => {
-		let currentTime = timer
-
-		const getSeconds = `0${(currentTime % 60)}`.slice(-2)
-		const minutes = `${Math.floor(currentTime / 60)}`
-		const getMinutes = `0${minutes % 60}`.slice(-2)
-		const getHours = `0${Math.floor(currentTime / 3600)}`.slice(-2)
-	
-		return `${getHours} : ${getMinutes} : ${getSeconds}`
+		dispatch(setActivity(event.target.value))
 	}
 
 	useEffect(() => {
@@ -78,7 +67,7 @@ const Stopwatch = () => {
 	return (
 		<>
 			<div>
-				<div>{formatTime()}</div>
+				<div>{formatTime(timer)}</div>
 				<div>
 					{renderActivities()}
 					<button onClick={handleStart} disabled={isActive || activity === ''}>Start</button>
