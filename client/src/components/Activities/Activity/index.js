@@ -3,8 +3,8 @@ import axios from 'axios'
 import style from './style.module.scss'
 import { CirclePicker } from 'react-color'
 
-const Activity = ({ data, getActivities }) => {
-	const [ activityName, setActivityName ] = useState(data.name)
+const Activity = ({ data }) => {
+	const [ name, setName ] = useState(data.name)
 	const [ color, setColor] = useState(data.color)
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
 
@@ -12,7 +12,6 @@ const Activity = ({ data, getActivities }) => {
 		event.preventDefault()
 
 		await axios.delete(`activities/${id}`).then(response => {
-			getActivities()
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -25,8 +24,7 @@ const Activity = ({ data, getActivities }) => {
 				color: color,
 				name: event.target.value
 			}).then(response => {
-				setActivityName(event.target.value)
-				getActivities()
+				setName(event.target.value)
 				console.log(response)
 			}).catch(error => {
 				console.log(error)
@@ -38,10 +36,9 @@ const Activity = ({ data, getActivities }) => {
 		if (color !== colorHex) {
 			await axios.put(`activities/${id}`, {
 				color: colorHex,
-				name: activityName
+				name: name
 			}).then(response => {
 				setColor(colorHex)
-				getActivities()
 				console.log(response)
 			}).catch(error => {
 				console.log(error)
@@ -62,7 +59,7 @@ const Activity = ({ data, getActivities }) => {
 				}
 			</div>
 			<div className={style.activityInput}>
-				<input type='text' value={activityName} onChange={event => setActivityName(event.target.value)} onBlur={event => handleNameEdit(event, data)}/>
+				<input type='text' value={name} onChange={event => setName(event.target.value)} onBlur={event => handleNameEdit(event, data)}/>
 			</div>
 			<div className={style.activityRemove} onClick={event => handleRemoval(event, data.id)}>
 				<span></span>

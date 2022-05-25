@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchEvents, eventsSelector } from '../../store/slices/events.js'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { eventsSelector } from '../../store/slices/events.js'
 import * as style from './style.module.scss'
 
 const Events = () => {
-	const dispatch = useDispatch()
 	const { events, loading, hasErrors } = useSelector(eventsSelector)
-
-	useEffect(() => {
-		dispatch(fetchEvents())
-	}, [dispatch])
 
 	const renderEvents = () => {
 		if (loading) return <p>Loading events...</p>

@@ -36,7 +36,6 @@ const Stopwatch = () => {
 			dispatch(setActive(false))
 			clearDriftless(timerInterval)
 			dispatch(resetTimer())
-			dispatch(fetchEvents())
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -49,6 +48,7 @@ const Stopwatch = () => {
 
 	useEffect(() => {
 		dispatch(fetchActivities())
+		dispatch(fetchEvents())
 	}, [dispatch])
 
 	const renderActivities = () => {

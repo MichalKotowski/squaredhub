@@ -6,6 +6,7 @@ const Navigation = () => {
 		<nav className={style.navigation}>
 			<NavLink to='/'>Home</NavLink>
 			<NavLink to='/activities'>Activities</NavLink>
+			<NavLink to='/charts'>Charts</NavLink>
 		</nav>
 	)
 }
