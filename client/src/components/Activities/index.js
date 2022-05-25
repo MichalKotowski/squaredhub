@@ -18,6 +18,7 @@ const Activities = () => {
 			date: new Date().toISOString().slice(0, 10),
 			color: '#123123'
 		}).then(response => {
+			dispatch(fetchActivities())
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -36,10 +37,6 @@ const Activities = () => {
 			</div>
 		)
 	}
-
-	useEffect(() => {
-		dispatch(fetchActivities)
-	}, [dispatch])
 
 	return (
 		<>

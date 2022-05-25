@@ -2,8 +2,11 @@ import { useState } from 'react'
 import axios from 'axios'
 import style from './style.module.scss'
 import { CirclePicker } from 'react-color'
+import { fetchActivities } from '../../../store/slices/activities.js'
+import { useDispatch } from 'react-redux'
 
 const Activity = ({ data }) => {
+	const dispatch = useDispatch()
 	const [ name, setName ] = useState(data.name)
 	const [ color, setColor] = useState(data.color)
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
@@ -12,6 +15,7 @@ const Activity = ({ data }) => {
 		event.preventDefault()
 
 		await axios.delete(`activities/${id}`).then(response => {
+			dispatch(fetchActivities())
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -24,6 +28,7 @@ const Activity = ({ data }) => {
 				color: color,
 				name: event.target.value
 			}).then(response => {
+				dispatch(fetchActivities())
 				setName(event.target.value)
 				console.log(response)
 			}).catch(error => {
@@ -38,6 +43,7 @@ const Activity = ({ data }) => {
 				color: colorHex,
 				name: name
 			}).then(response => {
+				dispatch(fetchActivities())
 				setColor(colorHex)
 				console.log(response)
 			}).catch(error => {

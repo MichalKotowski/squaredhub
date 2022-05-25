@@ -33,6 +33,7 @@ const Stopwatch = () => {
 			date: new Date().toISOString().slice(0, 10),
 			time: timer
 		}).then(response => {
+			dispatch(fetchEvents())
 			dispatch(setActive(false))
 			clearDriftless(timerInterval)
 			dispatch(resetTimer())
@@ -48,7 +49,6 @@ const Stopwatch = () => {
 
 	useEffect(() => {
 		dispatch(fetchActivities())
-		dispatch(fetchEvents())
 	}, [dispatch])
 
 	const renderActivities = () => {
