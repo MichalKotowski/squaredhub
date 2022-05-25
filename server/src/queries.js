@@ -56,7 +56,7 @@ const removeActivity = async (request, response) => {
 
 const getEvents = async (request, response) => {
 	try {
-		const { rows } = await pool.query('SELECT activities_log.id, activities_log.activity_id, activities_log.time_spent, activities.name, activities.color from activities_log, activities WHERE activities_log.activity_id = activities.id')
+		const { rows } = await pool.query('SELECT activities_log.id, activities_log.activity_id, activities_log.time_spent, activities_log.date_logged, activities.name, activities.color from activities_log, activities WHERE activities_log.activity_id = activities.id')
 		response.status(200).json(rows)
 	} catch (error) {
 		throw error
