@@ -29,7 +29,7 @@ const ChartWrapper = () => {
 				yaxis: {
 					labels: {
 						formatter: time => {
-							return `${time / 60}m`
+							return `${time / 60} mins`
 						}
 					}
 				},

@@ -25,7 +25,7 @@ const Activity = ({ data }) => {
 	const handleNameEdit = async (event, activity) => {
 		if (event.target.value !== activity.name) {
 			await axios.put(`activities/${activity.id}`, {
-				color: color,
+				color,
 				name: event.target.value
 			}).then(response => {
 				dispatch(fetchActivities())
@@ -41,7 +41,7 @@ const Activity = ({ data }) => {
 		if (color !== colorHex) {
 			await axios.put(`activities/${id}`, {
 				color: colorHex,
-				name: name
+				name
 			}).then(response => {
 				dispatch(fetchActivities())
 				setColor(colorHex)

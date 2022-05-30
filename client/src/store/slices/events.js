@@ -35,19 +35,20 @@ const mergeEvents = payload => {
 	let mergedDurations = []
 	const uniqueIds = [...new Set(payload.map(event => event.activity_id))]
 	
-	uniqueIds.forEach(id => {
+	for (let id of uniqueIds) {
 		let timeSpent = 0
 		let color = ''
-		payload.forEach(event => {
+		for (let event of payload) {
 			if (id === event.activity_id) {
 				timeSpent += event.time_spent
 				if (color === '') {
 					color = event.color
 				}
 			}
-		})
+		}
+
 		mergedDurations.push({activity_id: id, time_spent: timeSpent, color: color})
-	})
+	}
 
 	return mergedDurations
 }
@@ -57,46 +58,39 @@ const mergeEventsByDate = payload => {
 	let days = getDays()
 	const uniqueIds = [...new Set(payload.map(event => event.activity_id))]
 
-	uniqueIds.forEach(id => {
+	for (let id of uniqueIds) {
 		let eventsWithCurrentId = []
-		payload.forEach(event => {
+		for (let event of payload) {
 			if (id === event.activity_id) {
 				eventsWithCurrentId.push(event)
 			}
-		})
+		}
 		
 		const uniqueDates = [...new Set(eventsWithCurrentId.map(event => event.date_logged))]
 		let durationsLogged = []
-		uniqueDates.forEach(date => {
-			let timeSpent = 0
-
-			eventsWithCurrentId.forEach(event => {
-				if (date === event.date_logged) {
-					timeSpent += event.time_spent
-				}
-			})
-
+		for (let date of uniqueDates) {
+			let timeSpent = eventsWithCurrentId.reduce((totalTime, event) => date === event.date_logged ? totalTime + event.time_spent : totalTime + 0, 0)
 			durationsLogged.push({date: date.slice(0, 10), time: timeSpent})
-		})
+		}
 
 		let timeline = []
-		days.forEach(day => {
+		for (let day of days) {
 			let appended = false
 
-			durationsLogged.forEach(duration => {
+			for (let duration of durationsLogged) {
 				if (day === duration.date) {
 					timeline.push(duration.time)
 					appended = true
 				}
-			})
+			}
 
 			if (appended === false) {
 				timeline.push(0)
 			}
-		})
+		}
 
 		mergedDurations.push({name: eventsWithCurrentId[0].name, color: eventsWithCurrentId[0].color, data: timeline})
-	})
+	}
 
 	return mergedDurations
 }
