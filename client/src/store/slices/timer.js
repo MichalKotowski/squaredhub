@@ -14,10 +14,13 @@ const timerSlice = createSlice({
 			state.activity = payload
 		},
 		tick: state => {
-			state.timer = state.timer + 1
+			state.timer = +state.timer + 1
 		},
 		setActive: (state, { payload }) => {
 			state.isActive = payload
+		},
+		setTimer: (state, { payload }) => {
+			state.timer = payload
 		},
 		resetTimer: state => {
 			state.timer = 0
@@ -25,7 +28,7 @@ const timerSlice = createSlice({
 	}
 })
 
-export const { setActivity, tick, setActive, resetTimer } = timerSlice.actions
+export const { setActivity, tick, setActive, setTimer, resetTimer } = timerSlice.actions
 
 export const timerSelector = state => state.timer
 
