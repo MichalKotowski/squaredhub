@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import axios from 'axios'
-import style from './style.module.scss'
 import { CirclePicker } from 'react-color'
 import { fetchActivities } from '../../../store/slices/activities.js'
 import { useDispatch } from 'react-redux'
+import style from './style.module.scss'
 
 const Activity = ({ data }) => {
 	const dispatch = useDispatch()

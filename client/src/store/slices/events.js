@@ -56,7 +56,7 @@ const mergeEvents = payload => {
 const mergeEventsByDate = payload => {
 	let mergedDurations = []
 	let days = getDays()
-	const uniqueIds = [...new Set(payload.map(event => event.activity_id))]
+	const uniqueIds = new Set(payload.map(event => event.activity_id))
 
 	for (let id of uniqueIds) {
 		let eventsWithCurrentId = []
