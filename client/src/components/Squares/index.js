@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { eventsSelector } from '../../store/slices/events.js'
+import Paper from '@mui/material/Paper'
 import style from './style.module.scss'
 
 const Squares = () => {
@@ -7,7 +8,7 @@ const Squares = () => {
 
 	const renderSquares = () => {
 		// 60 for a minute, 3600 for an hour
-		const timePerBox = 60
+		const timePerBox = 3600
 
 		return mergedEvents.map(event => {
 			let amountOfBoxes = Math.floor(event.time_spent / timePerBox)
@@ -17,9 +18,11 @@ const Squares = () => {
 	}
 
 	return (
-		<div>
-			{renderSquares()}
-		</div>
+		<Paper sx={{ padding: '40px', paddingRight: '30px', paddingBottom: '30px' }}>
+			<div className={style.grid}>
+				{renderSquares()}
+			</div>
+		</Paper>
 	)
 }
 

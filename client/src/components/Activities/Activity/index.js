@@ -3,6 +3,10 @@ import axios from 'axios'
 import { CirclePicker } from 'react-color'
 import { fetchActivities } from '../../../store/slices/activities.js'
 import { useDispatch } from 'react-redux'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import DeleteIcon from '@mui/icons-material/Delete'
 import style from './style.module.scss'
 
 const Activity = ({ data }) => {
@@ -64,12 +68,16 @@ const Activity = ({ data }) => {
 					</> : null
 				}
 			</div>
-			<div className={style.activityInput}>
-				<input type='text' value={name} onChange={event => setName(event.target.value)} onBlur={event => handleNameEdit(event, data)}/>
-			</div>
-			<div className={style.activityRemove} onClick={event => handleRemoval(event, data.id)}>
-				<span></span>
-			</div>
+			<Box
+				noValidate
+				autoComplete='off'
+				className={style.input}
+				>
+				<TextField label='Name' variant='outlined' value={name} onChange={event => setName(event.target.value)} onBlur={event => handleNameEdit(event, data)} />
+			</Box>
+			<Button variant="outlined" startIcon={<DeleteIcon />} onClick={event => handleRemoval(event, data.id)}>
+				Remove
+			</Button>
 		</div>
 	)
 }

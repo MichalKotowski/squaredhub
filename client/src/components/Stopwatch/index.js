@@ -6,6 +6,14 @@ import { timerSelector, setActivity, tick, setActive, setTimer, resetTimer } fro
 import { formatTime } from '../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import Button from '@mui/material/Button'
+import ButtonGroup from '@mui/material/ButtonGroup'
 import * as style from './style.module.scss'
 
 let timerInterval
@@ -38,6 +46,7 @@ const Stopwatch = () => {
 			handleLocalStorage('submit')
 			dispatch(fetchEvents())
 			dispatch(setActive(false))
+			dispatch(setActivity(''))
 			clearDriftless(timerInterval)
 			dispatch(resetTimer())
 			console.log(response)
@@ -95,15 +104,25 @@ const Stopwatch = () => {
 	}, [dispatch])
 
 	const renderActivities = () => {
-		if (loading) return <p>Loading activities...</p>
-		if (hasErrors) return <p>Unable to display activities.</p>
+		if (loading) return <Typography variant="body1" gutterBottom>Loading activities...</Typography>
+		if (hasErrors) return <Typography variant="body1" gutterBottom>Unable to display activities.</Typography>
 		return (
-			<select value={activity} onChange={handleCurrentActivity}>
-				<option value='' default></option>
-				{activities.map(singleActivity => (
-					<option key={singleActivity.id} value={singleActivity.id}>{singleActivity.name}</option>
-				))}
-			</select>
+			<Box sx={{ minWidth: 120 }}>
+				<FormControl fullWidth>
+					<InputLabel id="activityLabel">Activity</InputLabel>
+					<Select
+						labelId="activityLabel"
+						id="activity"
+						value={activity}
+						label="Activity"
+						onChange={handleCurrentActivity}
+					>
+						{activities.map(singleActivity => (
+							<MenuItem key={singleActivity.id} value={singleActivity.id}>{singleActivity.name}</MenuItem>
+						))}
+					</Select>
+				</FormControl>
+			</Box>
 		)
 	}
 
@@ -113,9 +132,11 @@ const Stopwatch = () => {
 				<div>{formatTime(timer)}</div>
 				<div>
 					{renderActivities()}
-					<button onClick={handleStart} disabled={isActive || activity === ''}>Start</button>
-					<button onClick={handlePause} disabled={!isActive}>Pause</button>
-					<button onClick={handleSubmit} disabled={timer === 0}>Submit</button>
+					<ButtonGroup variant="contained" aria-label="Timer functionalities">
+						<Button onClick={handleStart} disabled={isActive || activity === ''}>Start</Button>
+						<Button onClick={handlePause} disabled={!isActive}>Pause</Button>
+						<Button onClick={handleSubmit} disabled={timer === 0}>Submit</Button>
+					</ButtonGroup>
 				</div>
 			</div>
 		</>

@@ -4,6 +4,10 @@ import axios from 'axios'
 import { fetchActivities, activitiesSelector } from '../../store/slices/activities.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { CirclePicker } from 'react-color'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 import style from './style.module.scss'
 
 const Activities = () => {
@@ -45,7 +49,7 @@ const Activities = () => {
 
 	return (
 		<>
-			{renderActivities()}
+			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>Add new activity</Typography>
 			<form onSubmit={handleSubmit} className={style.activity}>
 				<div className={style.activityColor} style={{backgroundColor: color}} onClick={() => setColorPickerVisibility(!isColorPickerVisible)}>
 					{ isColorPickerVisible ?
@@ -57,11 +61,17 @@ const Activities = () => {
 						</> : null
 					}
 				</div>
-				<div className={style.activityInput}>
-					<input type='text' value={name} onChange={event => setName(event.target.value)}/>
-				</div>
-				<input type='submit' value='Submit' />
+				<Box
+					noValidate
+					autoComplete='off'
+					className={style.input}
+					>
+					<TextField label='Name' variant='outlined' value={name} onChange={event => setName(event.target.value)} />
+				</Box>
+				<Button variant='contained' type='submit'>Submit</Button>
 			</form>
+			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '80px' }}>List of activities</Typography>
+			{renderActivities()}
 		</>
 	)
 }

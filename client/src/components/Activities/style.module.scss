@@ -8,10 +8,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: 40px;
 	.activityColor {
-		width: 70px;
-		height: 70px;
+		width: 56px;
+		height: 56px;
 		border-radius: 5px;
 		background-color: #F1F5F9;
 		cursor: pointer;
@@ -36,24 +35,7 @@
 			z-index: 50;
 		}
 	}
-	.activityInput {
-		padding: 10px 20px;
-		background-color: #F1F5F9;
-		border-radius: 5px;
+	.input {
 		margin: 0 20px;
-		width: 300px;
-		input {
-			transition: .2s ease-in-out;
-			background-color: #F1F5F9;
-			border: 1px solid #F1F5F9;
-			padding: 5px 10px;
-			border-radius: 3px;
-			width: 100%;
-		}
-		&:hover {
-			input {
-				border: 1px solid #E2E8F0;
-			}
-		}
 	}
 }
