@@ -21,6 +21,9 @@ app.delete('/activities/:id', db.removeActivity)
 app.get('/events', db.getEvents)
 app.post('/events', db.submitEvent)
 
+app.post('/login', db.loginUser)
+app.post('/register', db.registerUser)
+
 app.listen(port, () => {
 	console.log(`listening to port: ${port}`);
 })

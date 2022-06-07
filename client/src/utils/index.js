@@ -1,3 +1,6 @@
+import { PrivateRoute } from './routes'
+export { PrivateRoute }
+
 export const formatTime = time => {
 	const getSeconds = `0${(time % 60)}`.slice(-2)
 	const minutes = `${Math.floor(time / 60)}`

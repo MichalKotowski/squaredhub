@@ -1,4 +1,5 @@
 const pool = require('./db')
+const utilities = require('./utils')
 
 const getActivities = async (request, response) => {
 	try {
@@ -74,6 +75,67 @@ const submitEvent = async (request, response) => {
 	})
 }
 
+const registerUser = async (request, response) => {
+	const { firstName, lastName, email, password } = request.body
+
+	try {
+		const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+
+		if (existingUser.rows.length > 0) {
+			response.status(400).send('User already exists')
+		} else {
+			const hashedPassword = await utilities.hashPassword(password)
+			const newUser = await pool.query(
+				'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING user_id, first_name, last_name, email',
+				[firstName, lastName, email, hashedPassword]
+			)
+
+			const tokenObject = await utilities.issueJWT(newUser.rows[0])
+
+			response.status(201).json({
+				user: newUser.rows[0],
+				success: true,
+				token: tokenObject.token,
+				expiresIn: tokenObject.expires,
+			})
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+const loginUser = async (request, response) => {
+	try {
+		const user = await pool.query('SELECT * FROM users WHERE email = $1', [request.body.email])
+
+		if (user.rowCount === 0) {
+			response.status(401).send('Could not find user')
+		} else {
+			const isValid = await utilities.validPassword(
+				request.body.password,
+				user.rows[0].password
+			)
+
+			if (isValid) {
+				const tokenObject = await utilities.issueJWT(user.rows[0])
+
+				delete user.rows[0]['password']
+
+				response.status(200).json({
+					user: user.rows[0],
+					success: true,
+					token: tokenObject.token,
+					expiresIn: tokenObject.expires,
+				})
+			} else {
+				response.status(401).send('You entered the wrong password')
+			}
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 module.exports = {
 	getActivities,
 	getActivityById,
@@ -81,5 +143,7 @@ module.exports = {
 	updateActivity,
 	removeActivity,
 	getEvents,
-	submitEvent
+	submitEvent,
+	registerUser,
+	loginUser,
 }

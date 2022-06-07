@@ -6,14 +6,7 @@ import { timerSelector, setActivity, tick, setActive, setTimer, resetTimer } fro
 import { formatTime } from '../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import Button from '@mui/material/Button'
-import ButtonGroup from '@mui/material/ButtonGroup'
+import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup } from '@mui/material'
 import * as style from './style.module.scss'
 
 let timerInterval

@@ -1,22 +1,16 @@
 import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Menu from '@mui/material/Menu'
-import MenuIcon from '@mui/icons-material/Menu'
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
+import { useState, useContext } from 'react'
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, MenuItem } from '@mui/material'
+import { Menu as MenuIcon } from '@mui/icons-material'
+import { UserContext } from '../../UserContext'
 import style from './style.module.scss'
 
 const Navigation = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null)
+	const { user, setUser } = useContext(UserContext)
 
 	const pages = [
-		'Home', 'Activities', 'Charts'
+		'Home', 'Activities', 'Charts', 'Register', 'Login'
 	]
   
 	const handleOpenNavMenu = event => {
@@ -27,10 +21,19 @@ const Navigation = () => {
 	  setAnchorElNav(null)
 	}
 
+	const handleLogout = () => {
+		localStorage.removeItem('token')
+		localStorage.removeItem('user')
+		setUser(null)
+	}
+
 	return (
 		<AppBar position="static">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
+					{user && (
+						<p>Hello, User</p>
+					)}
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
@@ -65,6 +68,9 @@ const Navigation = () => {
 									<Typography textAlign="center">{page}</Typography>
 								</MenuItem>
 							))}
+							<MenuItem key='logout' component={NavLink} onClick={() => {handleCloseNavMenu(); handleLogout()}} to=''>
+								<Typography textAlign="center">Logout</Typography>
+							</MenuItem>
 						</Menu>
 					</Box>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -78,6 +84,13 @@ const Navigation = () => {
 								{page}
 							</Button>
 						))}
+						<Button
+							key='logout'
+							onClick={handleLogout}
+							sx={{ my: 2, color: 'white', display: 'block' }}
+						>
+							Logout
+						</Button>
 					</Box>
 				</Toolbar>
 			</Container>
