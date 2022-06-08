@@ -8,10 +8,18 @@ import style from './style.module.scss'
 const Navigation = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const { user, setUser } = useContext(UserContext)
+	let pages
 
-	const pages = [
-		'Home', 'Activities', 'Charts', 'Register', 'Login'
-	]
+	if (user) {
+		pages = [
+			'Home', 'Hub', 'Activities', 'Charts'
+		]
+	} else {
+		pages = [
+			'Home', 'Login', 'Register'
+		]
+	}
+
   
 	const handleOpenNavMenu = event => {
 	  setAnchorElNav(event.currentTarget)
@@ -31,9 +39,6 @@ const Navigation = () => {
 		<AppBar position="static">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					{user && (
-						<p>Hello, User</p>
-					)}
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
@@ -68,9 +73,11 @@ const Navigation = () => {
 									<Typography textAlign="center">{page}</Typography>
 								</MenuItem>
 							))}
-							<MenuItem key='logout' component={NavLink} onClick={() => {handleCloseNavMenu(); handleLogout()}} to=''>
-								<Typography textAlign="center">Logout</Typography>
-							</MenuItem>
+							{user &&
+								<MenuItem key='logout' component={NavLink} onClick={() => {handleCloseNavMenu(); handleLogout()}} to=''>
+									<Typography textAlign="center">Logout</Typography>
+								</MenuItem>
+							}
 						</Menu>
 					</Box>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -79,18 +86,20 @@ const Navigation = () => {
 								href={page === 'Home' ? '/' : `/${page.toLowerCase()}`}
 								key={page}
 								onClick={handleCloseNavMenu}
-								sx={{ my: 2, color: 'white', display: 'block' }}
+								sx={{ my: 2, color: 'white', display: 'block', minWidth: 'initial' }}
 							>
 								{page}
 							</Button>
 						))}
-						<Button
-							key='logout'
-							onClick={handleLogout}
-							sx={{ my: 2, color: 'white', display: 'block' }}
-						>
-							Logout
-						</Button>
+						{user &&
+							<Button
+								key='logout'
+								onClick={handleLogout}
+								sx={{ my: 2, color: 'white', display: 'block', minWidth: 'initial' }}
+							>
+								Logout
+							</Button>
+						}
 					</Box>
 				</Toolbar>
 			</Container>

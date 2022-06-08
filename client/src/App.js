@@ -34,11 +34,12 @@ const App = () => {
 		<UserContext.Provider value={{ user, setUser }}>
 			<Routes>
 				<Route element={<Layout />}>
-					<Route index path='/' element={<><Squares /><Events /><Stopwatch /></>} />
-					<Route path='activities' element={<PrivateRoute />}>
+					<Route index path='/' element={<><p>Homepage</p></>} />
+					<Route element={<PrivateRoute />}>
+						<Route path='hub' element={<><Squares /><Events /><Stopwatch /></>} />
 						<Route path='activities' element={<Activities />} />
+						<Route path='charts' element={<ChartWrapper />} />
 					</Route>
-					<Route path='charts' element={<ChartWrapper />} />
 					<Route path='register' element={<Register />} />
 					<Route path='login' element={<Login />} />
 					<Route path='*' element={<p>404</p>} />
