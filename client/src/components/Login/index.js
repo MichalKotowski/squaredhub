@@ -1,17 +1,19 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Typography, Grid, TextField, Button } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { UserContext } from '../../UserContext'
+import { login } from '../../store/slices/user'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
+	const dispatch = useDispatch()
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const { setUser } = useContext(UserContext)
 	const navigate = useNavigate()
 
 	const onSubmitForm = async event => {
 		event.preventDefault()
+
 		try {
 			const response = await axios.post('/login', {
 				email,
@@ -20,7 +22,7 @@ const Login = () => {
 
 			localStorage.setItem('token', response.data.token)
 			localStorage.setItem('user', JSON.stringify(response.data.user))
-			setUser(localStorage.getItem('user'))
+			dispatch(login(response.data.user))
 			
 			navigate('/')
 		} catch (error) {

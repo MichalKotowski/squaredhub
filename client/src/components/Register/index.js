@@ -1,10 +1,12 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Typography, Grid, TextField, Button } from '@mui/material'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserContext } from '../../UserContext'
+import { login } from '../../store/slices/user'
+import { useDispatch } from 'react-redux'
 
 const Register = () => {
+	const dispatch = useDispatch()
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [email, setEmail] = useState('')
@@ -12,7 +14,6 @@ const Register = () => {
 	const [confirmPassword, setConfirmPassword] = useState('')
 
 	const navigate = useNavigate()
-	const { setUser } = useContext(UserContext)
 
 	const onSubmitForm = async event => {
 		event.preventDefault()
@@ -27,7 +28,7 @@ const Register = () => {
 
 			localStorage.setItem('token', response.data.token)
 			localStorage.setItem('user', JSON.stringify(response.data.user))
-			setUser(localStorage.getItem('user'))
+			dispatch(login(response.data.user))
 
 			navigate('/')
 		} catch (error) {

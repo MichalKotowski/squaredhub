@@ -1,9 +1,9 @@
-import { useContext } from 'react'
-import { UserContext } from '../UserContext'
 import { Outlet, Navigate } from 'react-router-dom'
+import { userSelector } from '../store/slices/user'
+import { useSelector } from 'react-redux'
 
-export const PrivateRoute = children => {
-	const { user } = useContext(UserContext)
+export const PrivateRoute = () => {
+	const { user } = useSelector(userSelector)
 
 	return user ? <Outlet /> : <Navigate to='/login' replace />
 }

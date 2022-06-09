@@ -1,16 +1,17 @@
 import { NavLink } from 'react-router-dom'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, MenuItem } from '@mui/material'
 import { Menu as MenuIcon } from '@mui/icons-material'
-import { UserContext } from '../../UserContext'
-import style from './style.module.scss'
+import { useSelector, useDispatch } from 'react-redux'
+import { userSelector, logout } from '../../store/slices/user.js'
 
 const Navigation = () => {
+	const dispatch = useDispatch()
 	const [anchorElNav, setAnchorElNav] = useState(null)
-	const { user, setUser } = useContext(UserContext)
-	let pages
+	const { user, isLoggedIn } = useSelector(userSelector)
+	let pages = []
 
-	if (user) {
+	if (isLoggedIn) {
 		pages = [
 			'Home', 'Hub', 'Activities', 'Charts'
 		]
@@ -32,7 +33,7 @@ const Navigation = () => {
 	const handleLogout = () => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('user')
-		setUser(null)
+		dispatch(logout())
 	}
 
 	return (

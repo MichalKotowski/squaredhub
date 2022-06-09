@@ -2,8 +2,10 @@ const pool = require('./db')
 const utilities = require('./utils')
 
 const getActivities = async (request, response) => {
+	const { userId } = request.query
+
 	try {
-		const { rows } = await pool.query('SELECT * FROM activities ORDER BY id ASC')
+		const { rows } = await pool.query('SELECT * FROM activities WHERE user_id = $1 ORDER BY id ASC', [userId])
 		response.status(200).json(rows)
 	} catch (error) {
 		throw error

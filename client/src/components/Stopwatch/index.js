@@ -7,7 +7,6 @@ import { formatTime } from '../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
 import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup } from '@mui/material'
-import * as style from './style.module.scss'
 
 let timerInterval
 
