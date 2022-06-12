@@ -2,10 +2,9 @@ import { useState } from 'react'
 import axios from 'axios'
 import { CirclePicker } from 'react-color'
 import { fetchActivities } from '../../../store/slices/activities.js'
-import { useDispatch } from 'react-redux'
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { userSelector } from '../../../store/slices/user.js'
+import { Box, TextField, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import style from './style.module.scss'
 
@@ -14,12 +13,13 @@ const Activity = ({ data }) => {
 	const [ name, setName ] = useState(data.name)
 	const [ color, setColor] = useState(data.color)
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
+	const { user } = useSelector(userSelector)
 
 	const handleRemoval = async (event, id) => {
 		event.preventDefault()
 
 		await axios.delete(`activities/${id}`).then(response => {
-			dispatch(fetchActivities())
+			dispatch(fetchActivities(user.user_id))
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -32,7 +32,7 @@ const Activity = ({ data }) => {
 				color,
 				name: event.target.value
 			}).then(response => {
-				dispatch(fetchActivities())
+				dispatch(fetchActivities(user.user_id))
 				setName(event.target.value)
 				console.log(response)
 			}).catch(error => {
@@ -47,7 +47,7 @@ const Activity = ({ data }) => {
 				color: colorHex,
 				name
 			}).then(response => {
-				dispatch(fetchActivities())
+				dispatch(fetchActivities(user.user_id))
 				setColor(colorHex)
 				console.log(response)
 			}).catch(error => {

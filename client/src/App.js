@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Events from './components/Events'
 import Activities from './components/Activities'
@@ -8,14 +8,15 @@ import Layout from './components/Layout'
 import Register from './components/Register'
 import Login from './components/Login'
 import { Routes, Route } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from './store/slices/events.js'
 import { fetchActivities } from './store/slices/activities.js'
-import { login } from './store/slices/user.js'
+import { login, userSelector } from './store/slices/user.js'
 import { PrivateRoute } from './utils'
 
 const App = () => {
 	const dispatch = useDispatch()
+	const { user } = useSelector(userSelector)
 
 	useEffect(() => {
 		const existingUser = localStorage.getItem('user')
@@ -24,9 +25,9 @@ const App = () => {
 			dispatch(login(JSON.parse(existingUser)))
 		}
 
-		dispatch(fetchEvents())
-		dispatch(fetchActivities())
-	}, [])
+		dispatch(fetchEvents(user.user_id))
+		dispatch(fetchActivities(user.user_id))
+	}, [user.user_id])
 
 	return (
 		<Routes>

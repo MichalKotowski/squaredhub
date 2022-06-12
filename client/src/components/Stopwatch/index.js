@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../store/slices/events.js'
-import { fetchActivities, activitiesSelector } from '../../store/slices/activities.js'
+import { activitiesSelector } from '../../store/slices/activities.js'
 import { timerSelector, setActivity, tick, setActive, setTimer, resetTimer } from '../../store/slices/timer.js'
 import { formatTime } from '../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
 import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup } from '@mui/material'
+import { userSelector } from '../../store/slices/user.js'
+import { Link } from 'react-router-dom'
 
 let timerInterval
 
@@ -14,6 +16,7 @@ const Stopwatch = () => {
 	const dispatch = useDispatch()
 	const { activities, loading, hasErrors } = useSelector(activitiesSelector)
 	const { activity, timer, isActive } = useSelector(timerSelector)
+	const { user } = useSelector(userSelector)
 
 	const handleStart = () => {
 		handleLocalStorage('start')
@@ -36,7 +39,7 @@ const Stopwatch = () => {
 			time: timer
 		}).then(response => {
 			handleLocalStorage('submit')
-			dispatch(fetchEvents())
+			dispatch(fetchEvents(user.user_id))
 			dispatch(setActive(false))
 			dispatch(setActivity(''))
 			clearDriftless(timerInterval)
@@ -91,14 +94,11 @@ const Stopwatch = () => {
 		}
 	}, [])
 
-	useEffect(() => {
-		dispatch(fetchActivities())
-	}, [dispatch])
-
 	const renderActivities = () => {
 		if (loading) return <Typography variant="body1" gutterBottom>Loading activities...</Typography>
 		if (hasErrors) return <Typography variant="body1" gutterBottom>Unable to display activities.</Typography>
-		return (
+
+		if (activities.length > 0) {
 			<Box sx={{ minWidth: 120 }}>
 				<FormControl fullWidth>
 					<InputLabel id="activityLabel">Activity</InputLabel>
@@ -115,7 +115,9 @@ const Stopwatch = () => {
 					</Select>
 				</FormControl>
 			</Box>
-		)
+		}
+
+		return <Typography variant="body1" gutterBottom><Link to="/activities">Add a new activity</Link> before using a stopwatch</Typography>
 	}
 
 	return (

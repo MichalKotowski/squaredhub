@@ -101,12 +101,16 @@ export const eventsSelector = state => state.events
 
 export default eventsSlice.reducer
 
-export function fetchEvents() {
+export function fetchEvents(userId) {
 	return async dispatch => {
 		dispatch(getEvents())
 
 		try {
-			const response = await axios.get('events')
+			const response = await axios.get('events', {
+				params: {
+					userId
+				}
+			})
 			const data = response.data
 
 			dispatch(getEventsSuccess(data))

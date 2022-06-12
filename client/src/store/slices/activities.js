@@ -32,14 +32,14 @@ export const activitiesSelector = state => state.activities
 
 export default activitiesSlice.reducer
 
-export function fetchActivities() {
+export function fetchActivities(userId) {
 	return async dispatch => {
 		dispatch(getActivities())
 
 		try {
 			const response = await axios.get('activities', {
 				params: {
-					userId: 1
+					userId
 				}
 			})
 			const data = response.data

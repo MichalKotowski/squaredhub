@@ -74,7 +74,7 @@ const Navigation = () => {
 									<Typography textAlign="center">{page}</Typography>
 								</MenuItem>
 							))}
-							{user &&
+							{isLoggedIn &&
 								<MenuItem key='logout' component={NavLink} onClick={() => {handleCloseNavMenu(); handleLogout()}} to=''>
 									<Typography textAlign="center">Logout</Typography>
 								</MenuItem>
@@ -92,7 +92,7 @@ const Navigation = () => {
 								{page}
 							</Button>
 						))}
-						{user &&
+						{isLoggedIn &&
 							<Button
 								key='logout'
 								onClick={handleLogout}

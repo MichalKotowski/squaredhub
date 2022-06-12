@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import Navigation from '../Navigation'
 import { Helmet } from 'react-helmet'
-import Container from '@mui/material/Container';
+import Container from '@mui/material/Container'
 import style from './style.module.scss'
 
 const Layout = () => {

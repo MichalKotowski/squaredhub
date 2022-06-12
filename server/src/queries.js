@@ -24,9 +24,9 @@ const getActivityById = async (request, response) => {
 }
 
 const createActivity = async (request, response) => {
-	const { name, date, color } = request.body
+	const { name, date, color, userId } = request.body
 
-	await pool.query('INSERT INTO activities (user_id, name, date_created, color) VALUES (1, $1, $2, $3) RETURNING id', [name, date, color], (error, result) => {
+	await pool.query('INSERT INTO activities (user_id, name, date_created, color) VALUES ($1, $2, $3, $4) RETURNING id', [userId, name, date, color], (error, result) => {
 		if (error) {
 			throw error
 		}
@@ -58,8 +58,10 @@ const removeActivity = async (request, response) => {
 }
 
 const getEvents = async (request, response) => {
+	const { userId } = request.query
+
 	try {
-		const { rows } = await pool.query('SELECT activities_log.id, activities_log.activity_id, activities_log.time_spent, activities_log.date_logged, activities.name, activities.color from activities_log, activities WHERE activities_log.activity_id = activities.id')
+		const { rows } = await pool.query('SELECT activities_log.id, activities_log.activity_id, activities_log.time_spent, activities_log.date_logged, activities.name, activities.color from activities_log, activities WHERE activities_log.activity_id = activities.id AND activities_log.user_id = $1', [userId])
 		response.status(200).json(rows)
 	} catch (error) {
 		throw error

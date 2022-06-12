@@ -4,15 +4,14 @@ import axios from 'axios'
 import { fetchActivities, activitiesSelector } from '../../store/slices/activities.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { CirclePicker } from 'react-color'
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import { Box, TextField, Button, Typography } from '@mui/material'
+import { userSelector } from '../../store/slices/user.js'
 import style from './style.module.scss'
 
 const Activities = () => {
 	const dispatch = useDispatch()
 	const { activities, loading, hasErrors } = useSelector(activitiesSelector)
+	const { user } = useSelector(userSelector)
 	const [ name, setName ] = useState('')
 	const [ color, setColor ] = useState('')
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
@@ -23,11 +22,12 @@ const Activities = () => {
 		await axios.post('activities', {
 			name,
 			date: new Date().toISOString().slice(0, 10),
-			color
+			color,
+			userId: user.user_id
 		}).then(response => {
 			setName('')
 			setColor('')
-			dispatch(fetchActivities())
+			dispatch(fetchActivities(user.user_id))
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -70,7 +70,9 @@ const Activities = () => {
 				</Box>
 				<Button variant='contained' type='submit'>Submit</Button>
 			</form>
-			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '80px' }}>List of activities</Typography>
+			{activities.length > 0 &&
+				<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '80px' }}>List of activities</Typography>
+			}
 			{renderActivities()}
 		</>
 	)
