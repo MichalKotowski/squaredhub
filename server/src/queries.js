@@ -69,9 +69,9 @@ const getEvents = async (request, response) => {
 }
 
 const submitEvent = async (request, response) => {
-	const { id, date, time } = request.body
+	const { id, date, time, userId } = request.body
 
-	await pool.query('INSERT INTO activities_log (user_id, activity_id, date_logged, time_spent) VALUES (1, $1, $2, $3) RETURNING id', [id, date, time], (error, result) => {
+	await pool.query('INSERT INTO activities_log (user_id, activity_id, date_logged, time_spent) VALUES ($1, $2, $3, $4) RETURNING id', [userId, id, date, time], (error, result) => {
 		if (error) {
 			throw error
 		}

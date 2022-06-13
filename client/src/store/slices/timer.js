@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const initialState = {
 	activity: '',
-	timer: 0,
-	isActive: false
+	isActive: false,
 }
 
 const timerSlice = createSlice({
@@ -13,22 +12,19 @@ const timerSlice = createSlice({
 		setActivity: (state, { payload }) => {
 			state.activity = payload
 		},
-		tick: state => {
-			state.timer = +state.timer + 1
-		},
 		setActive: (state, { payload }) => {
 			state.isActive = payload
 		},
-		setTimer: (state, { payload }) => {
-			state.timer = payload
-		},
 		resetTimer: state => {
 			state.timer = 0
+			state.activity = ''
+			state.timestamp = 0
+			state.savedDuration = 0
 		}
 	}
 })
 
-export const { setActivity, tick, setActive, setTimer, resetTimer } = timerSlice.actions
+export const { setActivity, setActive, resetTimer } = timerSlice.actions
 
 export const timerSelector = state => state.timer
 

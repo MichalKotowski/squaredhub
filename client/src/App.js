@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Events from './components/Events'
 import Activities from './components/Activities'
@@ -13,16 +13,20 @@ import { fetchEvents } from './store/slices/events.js'
 import { fetchActivities } from './store/slices/activities.js'
 import { login, userSelector } from './store/slices/user.js'
 import { PrivateRoute } from './utils'
+import { TimerContext } from './TimerContext'
 
 const App = () => {
 	const dispatch = useDispatch()
 	const { user } = useSelector(userSelector)
+	const [ isLoading, setIsLoading ] = useState(true)
+	const [ watchTime, setWatchTime ] = useState(0)
 
 	useEffect(() => {
 		const existingUser = localStorage.getItem('user')
 
 		if (existingUser) {
 			dispatch(login(JSON.parse(existingUser)))
+			setIsLoading(false)
 		}
 
 		dispatch(fetchEvents(user.user_id))
@@ -30,19 +34,21 @@ const App = () => {
 	}, [user.user_id])
 
 	return (
-		<Routes>
-			<Route element={<Layout />}>
-				<Route index path='/' element={<><p>Homepage</p></>} />
-				<Route element={<PrivateRoute />}>
-					<Route path='hub' element={<><Squares /><Events /><Stopwatch /></>} />
-					<Route path='activities' element={<Activities />} />
-					<Route path='charts' element={<ChartWrapper />} />
+		<TimerContext.Provider value={{ watchTime, setWatchTime }}>
+			<Routes>
+				<Route element={<Layout />}>
+					<Route index path='/' element={<><p>Homepage</p></>} />
+					<Route element={<PrivateRoute isLoading={isLoading} />}>
+						<Route path='hub' element={<><Squares /><Events /><Stopwatch /></>} />
+						<Route path='activities' element={<Activities />} />
+						<Route path='charts' element={<ChartWrapper />} />
+					</Route>
+					<Route path='register' element={<Register />} />
+					<Route path='login' element={<Login />} />
+					<Route path='*' element={<p>404</p>} />
 				</Route>
-				<Route path='register' element={<Register />} />
-				<Route path='login' element={<Login />} />
-				<Route path='*' element={<p>404</p>} />
-			</Route>
-		</Routes>
+			</Routes>
+		</TimerContext.Provider>
 	)
 }
 

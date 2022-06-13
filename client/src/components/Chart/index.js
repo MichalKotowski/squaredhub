@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 import { eventsSelector } from '../../store/slices/events.js'
 import Chart from 'react-apexcharts'
 import { prettifyTime, getDays } from '../../utils'
+import { Typography } from '@mui/material'
 
 const ChartWrapper = () => {
 	const { chartData } = useSelector(eventsSelector)
@@ -49,7 +50,10 @@ const ChartWrapper = () => {
 
 	return (
 		<div>
-			{renderChart()}
+			{chartData.length
+				? renderChart()
+				: <Typography variant="body1" gutterBottom>There's no data to display yet</Typography>
+			}
 		</div>
 	)
 }

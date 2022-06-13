@@ -1,49 +1,46 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../store/slices/events.js'
 import { activitiesSelector } from '../../store/slices/activities.js'
-import { timerSelector, setActivity, tick, setActive, setTimer, resetTimer } from '../../store/slices/timer.js'
+import { timerSelector, setActivity, setActive, resetTimer } from '../../store/slices/timer.js'
 import { formatTime } from '../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
 import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup } from '@mui/material'
 import { userSelector } from '../../store/slices/user.js'
 import { Link } from 'react-router-dom'
-
-let timerInterval
+import { TimerContext } from '../../TimerContext'
 
 const Stopwatch = () => {
 	const dispatch = useDispatch()
 	const { activities, loading, hasErrors } = useSelector(activitiesSelector)
-	const { activity, timer, isActive } = useSelector(timerSelector)
+	const { activity, isActive } = useSelector(timerSelector)
 	const { user } = useSelector(userSelector)
+	const newTimerInterval = useRef(null)
+	const { watchTime, setWatchTime } = useContext(TimerContext)
 
 	const handleStart = () => {
-		handleLocalStorage('start')
 		dispatch(setActive(true))
-		timerInterval = setDriftlessInterval(() => {
-			dispatch(tick())
-		}, 1000)
+		handleLocalStorage('start')
 	}
 
 	const handlePause = () => {
-		handleLocalStorage('pause')
 		dispatch(setActive(false))
-		clearDriftless(timerInterval)
+		handleLocalStorage('pause')
 	}
 
 	const handleSubmit = async () => {
 		await axios.post('/events', {
 			id: activity,
 			date: new Date().toISOString().slice(0, 10),
-			time: timer
+			time: watchTime,
+			userId: user.user_id
 		}).then(response => {
-			handleLocalStorage('submit')
-			dispatch(fetchEvents(user.user_id))
 			dispatch(setActive(false))
-			dispatch(setActivity(''))
-			clearDriftless(timerInterval)
+			dispatch(fetchEvents(user.user_id))
 			dispatch(resetTimer())
+			setWatchTime(0)
+			handleLocalStorage('submit')
 			console.log(response)
 		}).catch(error => {
 			console.log(error)
@@ -54,6 +51,7 @@ const Stopwatch = () => {
 		if (action === 'start') {
 			localStorage.setItem('isActive', true)
 			localStorage.setItem('timestamp', Date.now())
+			localStorage.setItem('userId', user.user_id)
 		} else if (action === 'pause') {
 			localStorage.setItem('isActive', false)
 			if (localStorage.getItem('savedDuration')) {
@@ -66,6 +64,7 @@ const Stopwatch = () => {
 			localStorage.removeItem('timestamp')
 			localStorage.removeItem('activity')
 			localStorage.removeItem('savedDuration')
+			localStorage.removeItem('userId')
 		}
 	}
 
@@ -74,65 +73,72 @@ const Stopwatch = () => {
 		localStorage.setItem('activity', event.target.value)
 	}
 
+	const renderActivities = () => {
+		if (loading) return <Typography variant="body1" gutterBottom>Loading activities...</Typography>
+		if (hasErrors) return <Typography variant="body1" gutterBottom>Unable to display activities.</Typography>
+
+		if (activities.length) {
+			return (
+				<Box sx={{ minWidth: 120 }}>
+					<FormControl fullWidth>
+						<InputLabel id="activityLabel">Activity</InputLabel>
+						<Select
+							labelId="activityLabel"
+							id="activity"
+							value={activity}
+							label="Activity"
+							onChange={handleCurrentActivity}
+						>
+							{activities.map(singleActivity => (
+								<MenuItem key={singleActivity.id} value={singleActivity.id}>{singleActivity.name}</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Box>
+			)
+		} else {
+			return <Typography variant="body1" gutterBottom><Link to="/activities">Add a new activity</Link> before using a stopwatch</Typography>
+		}
+	}
+
 	useEffect(() => {
-		if (localStorage.getItem('timestamp') && isActive === false) {
+		if (isActive) {
+			newTimerInterval.current = setDriftlessInterval(() => {
+				setWatchTime(watchTime => watchTime + 1)
+			}, 1000)
+		} else {
+			clearDriftless(newTimerInterval.current)
+		}
+	}, [isActive])
+
+	useEffect(() => {
+		if (localStorage.getItem('timestamp') && !isActive && +localStorage.getItem('userId') === user.user_id) {
 			if (localStorage.getItem('isActive') === 'true') {
-				dispatch(setActive(true))
 				dispatch(setActivity(localStorage.getItem('activity')))
+
 				if (localStorage.getItem('savedDuration')) {
-					dispatch(setTimer(+localStorage.getItem('savedDuration') + Math.floor((Date.now() - localStorage.getItem('timestamp')) / 1000)))
+					setWatchTime(+localStorage.getItem('savedDuration') + Math.floor((Date.now() - localStorage.getItem('timestamp')) / 1000))
 				} else {
-					dispatch(setTimer(Math.floor((Date.now() - localStorage.getItem('timestamp')) / 1000)))
+					setWatchTime(Math.floor((Date.now() - localStorage.getItem('timestamp')) / 1000))
 				}
-				timerInterval = setDriftlessInterval(() => {
-					dispatch(tick())
-				}, 1000)
+
+				dispatch(setActive(true))
 			} else {
-				dispatch(setTimer(localStorage.getItem('savedDuration')))
+				setWatchTime(+localStorage.getItem('savedDuration'))
 				dispatch(setActivity(localStorage.getItem('activity')))
 			}
 		}
 	}, [])
 
-	const renderActivities = () => {
-		if (loading) return <Typography variant="body1" gutterBottom>Loading activities...</Typography>
-		if (hasErrors) return <Typography variant="body1" gutterBottom>Unable to display activities.</Typography>
-
-		if (activities.length > 0) {
-			<Box sx={{ minWidth: 120 }}>
-				<FormControl fullWidth>
-					<InputLabel id="activityLabel">Activity</InputLabel>
-					<Select
-						labelId="activityLabel"
-						id="activity"
-						value={activity}
-						label="Activity"
-						onChange={handleCurrentActivity}
-					>
-						{activities.map(singleActivity => (
-							<MenuItem key={singleActivity.id} value={singleActivity.id}>{singleActivity.name}</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-			</Box>
-		}
-
-		return <Typography variant="body1" gutterBottom><Link to="/activities">Add a new activity</Link> before using a stopwatch</Typography>
-	}
-
 	return (
 		<>
-			<div>
-				<div>{formatTime(timer)}</div>
-				<div>
-					{renderActivities()}
-					<ButtonGroup variant="contained" aria-label="Timer functionalities">
-						<Button onClick={handleStart} disabled={isActive || activity === ''}>Start</Button>
-						<Button onClick={handlePause} disabled={!isActive}>Pause</Button>
-						<Button onClick={handleSubmit} disabled={timer === 0}>Submit</Button>
-					</ButtonGroup>
-				</div>
-			</div>
+			{formatTime(watchTime)}
+			{renderActivities()}
+			<ButtonGroup variant="contained" aria-label="Timer functionalities">
+				<Button onClick={handleStart} disabled={isActive || activity === ''}>Start</Button>
+				<Button onClick={handlePause} disabled={!isActive}>Pause</Button>
+				<Button onClick={handleSubmit} disabled={watchTime === 0}>Submit</Button>
+			</ButtonGroup>
 		</>
 	)
 }
