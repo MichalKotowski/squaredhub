@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import Stopwatch from './components/Stopwatch'
+import Hub from './components/Hub'
 import Events from './components/Events'
 import Activities from './components/Activities'
-import Squares from './components/Squares'
 import ChartWrapper from './components/Chart'
 import Layout from './components/Layout'
 import Register from './components/Register'
@@ -39,9 +38,10 @@ const App = () => {
 				<Route element={<Layout />}>
 					<Route index path='/' element={<><p>Homepage</p></>} />
 					<Route element={<PrivateRoute isLoading={isLoading} />}>
-						<Route path='hub' element={<><Squares /><Events /><Stopwatch /></>} />
+						<Route path='hub' element={<Hub />} />
 						<Route path='activities' element={<Activities />} />
 						<Route path='charts' element={<ChartWrapper />} />
+						<Route path='events' element={<Events />} />
 					</Route>
 					<Route path='register' element={<Register />} />
 					<Route path='login' element={<Login />} />

@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchEvents } from '../../store/slices/events.js'
-import { activitiesSelector } from '../../store/slices/activities.js'
-import { timerSelector, setActivity, setActive, resetTimer } from '../../store/slices/timer.js'
-import { formatTime } from '../../utils'
+import { fetchEvents } from '../../../store/slices/events.js'
+import { activitiesSelector } from '../../../store/slices/activities.js'
+import { timerSelector, setActivity, setActive, resetTimer } from '../../../store/slices/timer.js'
+import { formatTime } from '../../../utils'
 import { setDriftlessInterval, clearDriftless } from 'driftless'
 import axios from 'axios'
-import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup } from '@mui/material'
-import { userSelector } from '../../store/slices/user.js'
+import { Typography, Box, InputLabel, MenuItem, FormControl, Select, Button, ButtonGroup, Grid } from '@mui/material'
+import { userSelector } from '../../../store/slices/user.js'
 import { Link } from 'react-router-dom'
-import { TimerContext } from '../../TimerContext'
+import { TimerContext } from '../../../TimerContext'
+import style from './style.module.scss'
 
 const Stopwatch = () => {
 	const dispatch = useDispatch()
@@ -106,8 +107,7 @@ const Stopwatch = () => {
 			newTimerInterval.current = setDriftlessInterval(() => {
 				setWatchTime(watchTime => watchTime + 1)
 			}, 1000)
-		} else {
-			clearDriftless(newTimerInterval.current)
+			return () => clearDriftless(newTimerInterval.current)
 		}
 	}, [isActive])
 
@@ -132,13 +132,19 @@ const Stopwatch = () => {
 
 	return (
 		<>
-			{formatTime(watchTime)}
-			{renderActivities()}
-			<ButtonGroup variant="contained" aria-label="Timer functionalities">
-				<Button onClick={handleStart} disabled={isActive || activity === ''}>Start</Button>
-				<Button onClick={handlePause} disabled={!isActive}>Pause</Button>
-				<Button onClick={handleSubmit} disabled={watchTime === 0}>Submit</Button>
-			</ButtonGroup>
+			<Grid container spacing={0} justifyContent="center" alignItems="center" className={style.stopwatch}>
+				<Grid item xs={12} md={4}>
+					<Typography variant="h3" gutterBottom>{formatTime(watchTime)}</Typography>
+				</Grid>
+				<Grid item xs={12} md={8}>
+					{renderActivities()}
+					<ButtonGroup variant="contained" aria-label="Timer functionalities" className={style.buttons}>
+						<Button onClick={handleStart} disabled={isActive || activity === ''}>Start</Button>
+						<Button onClick={handlePause} disabled={!isActive}>Pause</Button>
+						<Button onClick={handleSubmit} disabled={watchTime === 0}>Submit</Button>
+					</ButtonGroup>
+				</Grid>
+			</Grid>
 		</>
 	)
 }

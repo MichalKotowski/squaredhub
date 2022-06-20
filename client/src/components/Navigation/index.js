@@ -13,7 +13,7 @@ const Navigation = () => {
 
 	if (isLoggedIn) {
 		pages = [
-			'Home', 'Hub', 'Activities', 'Charts'
+			'Home', 'Hub', 'Activities', 'Charts', 'Events'
 		]
 	} else {
 		pages = [
@@ -71,7 +71,7 @@ const Navigation = () => {
 						>
 							{pages.map(page => (
 								<MenuItem key={page} component={NavLink} onClick={handleCloseNavMenu} to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}>
-									<Typography textAlign="center">{page}</Typography>
+									<Typography textAlign="center">{page === 'Events' ? 'Events log' : page}</Typography>
 								</MenuItem>
 							))}
 							{isLoggedIn &&
@@ -89,7 +89,7 @@ const Navigation = () => {
 								onClick={handleCloseNavMenu}
 								sx={{ my: 2, color: 'white', display: 'block', minWidth: 'initial' }}
 							>
-								{page}
+								{page === 'Events' ? 'Events log' : page}
 							</Button>
 						))}
 						{isLoggedIn &&

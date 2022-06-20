@@ -7,7 +7,7 @@ export const formatTime = time => {
 	const getMinutes = `0${minutes % 60}`.slice(-2)
 	const getHours = `0${Math.floor(time / 3600)}`.slice(-2)
 
-	return `${getHours} : ${getMinutes} : ${getSeconds}`
+	return `${getHours}:${getMinutes}:${getSeconds}`
 }
 
 export const prettifyTime = duration => {   

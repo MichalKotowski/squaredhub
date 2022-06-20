@@ -12,7 +12,7 @@ const Layout = () => {
 				<meta name="viewport" content="initial-scale=1, width=device-width" />
 			</Helmet>
 			<Navigation />
-			<Container maxWidth='md' sx={{ margin: '2em auto' }}>
+			<Container maxWidth='md' sx={{ margin: '4em auto' }}>
 				<Outlet />
 			</Container>
 		</>
