@@ -49,7 +49,7 @@ const Activities = () => {
 
 	return (
 		<>
-			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>Add new activity</Typography>
+			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>New activity</Typography>
 			<form onSubmit={handleSubmit} className={style.activity}>
 				<div className={style.activityColor} style={{backgroundColor: color}} onClick={() => setColorPickerVisibility(!isColorPickerVisible)}>
 					{ isColorPickerVisible ?
@@ -71,7 +71,7 @@ const Activities = () => {
 				<Button variant='contained' type='submit'>Submit</Button>
 			</form>
 			{activities.length > 0 &&
-				<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '80px' }}>List of activities</Typography>
+				<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '2em' }}>Activities</Typography>
 			}
 			{renderActivities()}
 		</>

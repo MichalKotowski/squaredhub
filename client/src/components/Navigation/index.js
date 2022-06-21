@@ -13,7 +13,7 @@ const Navigation = () => {
 
 	if (isLoggedIn) {
 		pages = [
-			'Home', 'Hub', 'Activities', 'Charts', 'Events'
+			'Home', 'Hub', 'Activities', 'Statistics', 'Events'
 		]
 	} else {
 		pages = [

@@ -1,3 +1,7 @@
+.wrapper {
+	margin: 2em 0 4em;
+}
+
 .circle {
 	width: 10px;
 	height: 10px;
@@ -5,4 +9,6 @@
 	border-radius: 100%;
 	background-color: lightgrey;
 	margin-right: 10px;
+	position: relative;
+	top: -1px;
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Hub from './components/Hub'
 import Events from './components/Events'
 import Activities from './components/Activities'
-import ChartWrapper from './components/Chart'
+import Statistics from './components/Statistics'
 import Layout from './components/Layout'
 import Register from './components/Register'
 import Login from './components/Login'
@@ -40,7 +40,7 @@ const App = () => {
 					<Route element={<PrivateRoute isLoading={isLoading} />}>
 						<Route path='hub' element={<Hub />} />
 						<Route path='activities' element={<Activities />} />
-						<Route path='charts' element={<ChartWrapper />} />
+						<Route path='statistics' element={<Statistics />} />
 						<Route path='events' element={<Events />} />
 					</Route>
 					<Route path='register' element={<Register />} />

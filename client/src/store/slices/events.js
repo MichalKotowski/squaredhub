@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { getDays } from '../../utils'
+import { getDays, getOverall } from '../../utils'
 
 export const initialState = {
 	events: [],
 	mergedEvents: [],
 	chartData: [],
+	overallChartData: [],
 	loading: false,
 	hasErrors: false,
 }
@@ -18,9 +19,10 @@ const eventsSlice = createSlice({
 			state.loading = true
 		},
 		getEventsSuccess: (state, { payload }) => {
-			state.events = payload
+			state.events = payload.reverse()
 			state.mergedEvents = mergeEvents(payload)
 			state.chartData = mergeEventsByDate(payload)
+			state.overallChartData = mergeEventsByDate(payload, true)
 			state.loading = false
 			state.hasErrors = false
 		},
@@ -53,9 +55,9 @@ const mergeEvents = payload => {
 	return mergedDurations
 }
 
-const mergeEventsByDate = payload => {
+const mergeEventsByDate = (payload, overall = false) => {
 	let mergedDurations = []
-	let days = getDays()
+	let days = overall ? getOverall(payload[payload.length - 1]) : getDays()
 	const uniqueIds = new Set(payload.map(event => event.activity_id))
 
 	for (let id of uniqueIds) {
@@ -84,7 +86,7 @@ const mergeEventsByDate = payload => {
 				}
 			}
 
-			if (appended === false) {
+			if (!appended) {
 				timeline.push(0)
 			}
 		}

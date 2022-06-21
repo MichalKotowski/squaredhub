@@ -14,7 +14,7 @@ export const prettifyTime = duration => {
     let hours = ~~(duration / 3600)
     let minutes = ~~((duration % 3600) / 60)
     let seconds = ~~duration % 60
-	let time = ""
+	let time = ''
 
     if (hours > 0) {
         time += `${hours}h `
@@ -26,8 +26,8 @@ export const prettifyTime = duration => {
     return time
 }
 
-export const getDays = periodInDays => {
-	let weekDays = []
+export const getDays = (periodInDays, entireDate = false) => {
+	let period = []
 	let days = periodInDays ?? 6
 
 	while (days) {
@@ -36,12 +36,33 @@ export const getDays = periodInDays => {
 		day.setDate(day.getDate() - days)
 		day = day.toISOString().slice(0, 10)
 
-		weekDays.push(day)
+		period.push(day)
 
 		days--
 	}
 
-	weekDays.push(new Date().toISOString().slice(0, 10))
+	entireDate === false ? period.push(new Date().toISOString().slice(0, 10)) : period.push(new Date())
+	
+	return period
+}
 
-	return weekDays
+export const secondsToHms = time => {
+	const hours = Math.floor(+time / 3600)
+	const minutes = Math.floor(+time % 3600 / 60)
+	const seconds = Math.floor(+time % 3600 % 60)
+
+	const hoursDisplay = hours > 0 ? hours + (hours === 1 ? ' hour, ' : ' hours, ') : ''
+	const minutesDisplay = minutes > 0 ? minutes + (minutes === 1 ? ' minute, ' : ' minutes, ') : ''
+	const secondsDisplay = seconds > 0 ? seconds + (seconds === 1 ? ' second' : ' seconds') : ''
+
+	return hoursDisplay + minutesDisplay + secondsDisplay
+}
+
+export const getOverall = (firstLoggedEvent, entireDate = false) => {
+	const oneDay = 24 * 60 * 60 * 1000
+	let firstDate = new Date(firstLoggedEvent.date_logged)
+	const secondDate = Date.now() - oneDay
+	const differenceInDays = Math.round(Math.abs((firstDate.valueOf() - secondDate.valueOf()) / oneDay))
+
+	return getDays(differenceInDays, entireDate)
 }

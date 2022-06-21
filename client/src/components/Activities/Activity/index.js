@@ -27,7 +27,7 @@ const Activity = ({ data }) => {
 	}
 
 	const handleNameEdit = async (event, activity) => {
-		if (event.target.value !== activity.name) {
+		if (event.target.value !== activity.name && event.target.value !== '') {
 			await axios.put(`activities/${activity.id}`, {
 				color,
 				name: event.target.value
@@ -38,6 +38,12 @@ const Activity = ({ data }) => {
 			}).catch(error => {
 				console.log(error)
 			})
+		} else {
+			console.log(event.target.value)
+			setName(activity.name)
+			setTimeout(() => {
+				console.log(event.target.value)
+			}, 1000)
 		}
 	}
 
