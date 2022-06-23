@@ -61,7 +61,7 @@ export const secondsToHms = time => {
 export const getOverall = (firstLoggedEvent, entireDate = false) => {
 	const oneDay = 24 * 60 * 60 * 1000
 	let firstDate = new Date(firstLoggedEvent.date_logged)
-	const secondDate = Date.now() - oneDay
+	const secondDate = Date.now()
 	const differenceInDays = Math.round(Math.abs((firstDate.valueOf() - secondDate.valueOf()) / oneDay))
 
 	return getDays(differenceInDays, entireDate)

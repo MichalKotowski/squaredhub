@@ -4,14 +4,14 @@ import { CirclePicker } from 'react-color'
 import { fetchActivities } from '../../../store/slices/activities.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSelector } from '../../../store/slices/user.js'
-import { Box, TextField, Button } from '@mui/material'
+import { Box, TextField, Button, IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import style from './style.module.scss'
 
-const Activity = ({ data }) => {
+const Activity = ({ data, windowWidth }) => {
 	const dispatch = useDispatch()
 	const [ name, setName ] = useState(data.name)
-	const [ color, setColor] = useState(data.color)
+	const [ color, setColor ] = useState(data.color)
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
 	const { user } = useSelector(userSelector)
 
@@ -39,11 +39,7 @@ const Activity = ({ data }) => {
 				console.log(error)
 			})
 		} else {
-			console.log(event.target.value)
 			setName(activity.name)
-			setTimeout(() => {
-				console.log(event.target.value)
-			}, 1000)
 		}
 	}
 
@@ -81,9 +77,10 @@ const Activity = ({ data }) => {
 				>
 				<TextField label='Name' variant='outlined' value={name} onChange={event => setName(event.target.value)} onBlur={event => handleNameEdit(event, data)} />
 			</Box>
-			<Button variant="outlined" startIcon={<DeleteIcon />} onClick={event => handleRemoval(event, data.id)}>
-				Remove
-			</Button>
+			{windowWidth <= 500
+				? <IconButton color='primary' aria-label='Remove activity' component='span' onClick={event => handleRemoval(event, data.id)}><DeleteIcon /></IconButton>
+				: <Button variant='outlined' startIcon={<DeleteIcon />} onClick={event => handleRemoval(event, data.id)}>Remove</Button>
+			}
 		</div>
 	)
 }

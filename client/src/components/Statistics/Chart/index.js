@@ -11,9 +11,11 @@ const ChartWrapper = ({overall = false}) => {
 	const { events, chartData, overallChartData } = useSelector(eventsSelector)
 
 	const xAxisPeriod = () => {
-		return overall ? getOverall(events[events.length - 1], true).map(date => moment(date).format('Do of MMM')) : getDays(6, true).map(date => moment(date).format('Do of MMM'))
+		return overall 
+			? getOverall(events[events.length - 1], true).map(date => moment(date).format('Do of MMMM, YYYY')) 
+			: getDays(6, true).map(date => moment(date).format('Do of MMMM, YYYY'))
 	}
-	console.log(overall && xAxisPeriod().length > 30)
+
 	const renderChart = () => (
 		<Paper className={style.card}>
 			<Grid container className={style.grid}>
@@ -34,7 +36,7 @@ const ChartWrapper = ({overall = false}) => {
 							type: 'date',
 							categories: xAxisPeriod(),
 							labels: {
-								show: (overall && xAxisPeriod().length > 30) ? false : true,
+								show: false,
 								style: {
 									fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
 									fontWeight: '400'
@@ -58,8 +60,6 @@ const ChartWrapper = ({overall = false}) => {
 						},
 						grid: {
 							padding: {
-								left: 50,
-								right: 50,
 								bottom: 20
 							}
 						},
@@ -75,7 +75,7 @@ const ChartWrapper = ({overall = false}) => {
 							},
 							itemMargin: {
 								horizontal: 20,
-								vertical: 0
+								vertical: 5
 							},
 						}
 					}}

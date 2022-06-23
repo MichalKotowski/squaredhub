@@ -21,11 +21,11 @@ const Statistics = () => {
 							<Tab label='Overall' value='2' />
 						</TabList>
 					</Box>
-					<TabPanel value='1'>
+					<TabPanel value='1' sx={{ padding: 0 }}>
 						<Data />
 						<ChartWrapper />
 					</TabPanel>
-					<TabPanel value='2'>
+					<TabPanel value='2' sx={{ padding: 0 }}>
 						<Data overall={true} />
 						<ChartWrapper overall={true} />
 					</TabPanel>

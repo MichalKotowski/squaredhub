@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Homepage from './components/Homepage'
 import Hub from './components/Hub'
 import Events from './components/Events'
 import Activities from './components/Activities'
@@ -36,7 +37,7 @@ const App = () => {
 		<TimerContext.Provider value={{ watchTime, setWatchTime }}>
 			<Routes>
 				<Route element={<Layout />}>
-					<Route index path='/' element={<><p>Homepage</p></>} />
+					<Route index path='/' element={<Homepage />} />
 					<Route element={<PrivateRoute isLoading={isLoading} />}>
 						<Route path='hub' element={<Hub />} />
 						<Route path='activities' element={<Activities />} />

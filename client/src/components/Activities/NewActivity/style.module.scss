@@ -1,9 +1,7 @@
 .activity {
 	display: flex;
 	align-items: center;
-	&:not(:last-child) {
-		margin-bottom: 40px;
-	}
+	justify-content: center;
 	.activityColor {
 		width: 56px;
 		height: 56px;

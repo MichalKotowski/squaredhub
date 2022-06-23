@@ -3,39 +3,3 @@
 	flex-direction: column;
 	align-items: center;
 }
-
-.activity {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	.activityColor {
-		width: 56px;
-		height: 56px;
-		border-radius: 5px;
-		background-color: #F1F5F9;
-		cursor: pointer;
-		position: relative;
-		.colorPicker {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			z-index: 100;
-			background-color: white;
-			padding: 20px;
-			border-radius: 5px;
-			box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-		}
-		.cover {
-			left: 0;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			position: fixed;
-			cursor: default;
-			z-index: 50;
-		}
-	}
-	.input {
-		margin: 0 20px;
-	}
-}
