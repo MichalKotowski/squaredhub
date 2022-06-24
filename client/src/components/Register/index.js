@@ -19,7 +19,7 @@ const Register = () => {
 		event.preventDefault()
 
 		try {
-			const response = await axios.post('/register', {
+			const response = await axios.post('register', {
 				firstName,
 				lastName,
 				email,

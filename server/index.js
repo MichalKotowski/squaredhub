@@ -30,7 +30,9 @@ app.post('/login', db.loginUser)
 app.post('/register', db.registerUser)
 
 app.get('*', (request, response) => {
-	response.sendFile(path.join(__dirname, '../client/build/index.html'))
+	if (process.env.NODE_ENV === 'production') {
+		app.use(express.static(path.join(__dirname, '../client/build')))
+	}
 })
 
 app.listen(port, () => {

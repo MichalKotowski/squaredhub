@@ -31,7 +31,7 @@ const Stopwatch = () => {
 	}
 
 	const handleSubmit = async () => {
-		await axios.post('/events', {
+		await axios.post('events', {
 			id: activity,
 			date: new Date().toISOString().slice(0, 10),
 			time: watchTime,
