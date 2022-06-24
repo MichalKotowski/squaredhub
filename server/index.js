@@ -29,9 +29,9 @@ app.post('/events', db.submitEvent)
 app.post('/login', db.loginUser)
 app.post('/register', db.registerUser)
 
-app.get('*', (request, response) => {
+app.get('/*', (request, response) => {
 	if (process.env.NODE_ENV === 'production') {
-		app.use(express.static(path.join(__dirname, '../client/build')))
+		response.sendFile(path.join(__dirname, '../client/build/index.html'))
 	}
 })
 
