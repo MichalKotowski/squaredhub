@@ -7,7 +7,7 @@
 		"npm": "8.11.0"
 	},
     "scripts": {
-        "start": "npm start --prefix server",
+        "start": "npm start --prefix server && npm start --prefix client",
         "install-client": "cd client && npm install && npm run build && cd ..",
         "install-server": "cd server && npm install",
         "heroku-postbuild": "npm run install-client && npm run install-server"
