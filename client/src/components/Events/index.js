@@ -92,12 +92,12 @@ const Events = () => {
 	const renderEvents = () => {
 		if (loading) return <Typography variant='body1' gutterBottom>Loading events...</Typography>
 		if (hasErrors) return <Typography variant='body1' gutterBottom>Unable to display events.</Typography>
-		if (!data.length) return <Typography variant='body1' gutterBottom>Composing table...</Typography>
+		if (!events.length) return <Typography variant='body1' gutterBottom>There's no data to display yet</Typography>
 		return renderTable()
 	}
 
 	useEffect(() => {
-		if (!data.length) {
+		if (!data.length && events.length) {
 			formatData()
 		}
 	}, [data])

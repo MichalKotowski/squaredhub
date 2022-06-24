@@ -34,10 +34,11 @@ const Activities = () => {
 
 	return (
 		<>
-			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>New activity</Typography>
+			<Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>Add new activity</Typography>
 			<NewActivity windowWidth={windowWidth} />
-			{activities.length &&
-				<Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '2em' }}>Activities</Typography>
+			{activities.length 
+				? <Typography variant="h5" gutterBottom sx={{ textAlign: 'center', marginTop: '2em' }}>Activities</Typography>
+				: null
 			}
 			{renderActivities()}
 		</>
