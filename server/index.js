@@ -13,8 +13,6 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, '../client/build')))
 }
 
-console.log(path.join(__dirname, '../client/build'))
-
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -37,4 +35,6 @@ app.get('*', (request, response) => {
 
 app.listen(port, () => {
 	console.log(`listening to port: ${port}`);
+}).on('error', err => {
+    console.log(err)
 })
