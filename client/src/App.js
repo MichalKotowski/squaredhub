@@ -27,10 +27,10 @@ const App = () => {
 		if (existingUser) {
 			dispatch(login(JSON.parse(existingUser)))
 			setIsLoading(false)
-		}
 
-		dispatch(fetchEvents(user.user_id))
-		dispatch(fetchActivities(user.user_id))
+			dispatch(fetchEvents(user.user_id))
+			dispatch(fetchActivities(user.user_id))
+		}
 	}, [user.user_id])
 
 	return (
