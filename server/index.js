@@ -32,7 +32,7 @@ app.post('/login', db.loginUser)
 app.post('/register', db.registerUser)
 
 app.get('*', (request, response) => {
-	response.sendFile(path.join(__dirname, 'client/build/index.html'))
+	response.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
 
 app.listen(port, () => {
