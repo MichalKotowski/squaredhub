@@ -20,7 +20,7 @@ services:
 
   db:
     container_name: postgresdb
-    image: postgres
+    image: postgres:14.4
     restart: always
     ports:
       - 5432:5432
@@ -32,9 +32,9 @@ services:
 
   ui:
     container_name: pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:6.10
     ports:
       - 8080:80
     environment:
-      - PGADMIN_DEFAULT_EMAIL=mzkotowski@gmail.com
+      - PGADMIN_DEFAULT_EMAIL=admin@placeholder.com
       - PGADMIN_DEFAULT_PASSWORD=password

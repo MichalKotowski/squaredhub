@@ -37,7 +37,7 @@ export function fetchActivities(userId) {
 		dispatch(getActivities())
 
 		try {
-			const response = await axios.get('activities', {
+			const response = await axios.get('/api/activities', {
 				params: {
 					userId
 				}

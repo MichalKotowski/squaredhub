@@ -50,8 +50,9 @@ const removeActivity = async (request, response) => {
 	const id = parseInt(request.params.id)
 
 	try {
-		await pool.query('DELETE FROM activities WHERE id = $1', [id])
-		response.status(200).send(`Activity with id: ${id} was removed`)
+		await pool.query('DELETE FROM activities WHERE id = $1; ', [id])
+		await pool.query('DELETE FROM activities_log WHERE activity_id = $1', [id])
+		response.status(200).send(`Activity with id: ${id} and all its corresponding logged times were removed`)
 	} catch (error) {
 		throw error
 	}

@@ -18,7 +18,7 @@ const Activity = ({ data, windowWidth }) => {
 	const handleRemoval = async (event, id) => {
 		event.preventDefault()
 
-		await axios.delete(`activities/${id}`).then(response => {
+		await axios.delete(`/api/activities/${id}`).then(response => {
 			dispatch(fetchActivities(user.user_id))
 			console.log(response)
 		}).catch(error => {
@@ -28,7 +28,7 @@ const Activity = ({ data, windowWidth }) => {
 
 	const handleNameEdit = async (event, activity) => {
 		if (event.target.value !== activity.name && event.target.value !== '') {
-			await axios.put(`activities/${activity.id}`, {
+			await axios.put(`/api/activities/${activity.id}`, {
 				color,
 				name: event.target.value
 			}).then(response => {
@@ -45,7 +45,7 @@ const Activity = ({ data, windowWidth }) => {
 
 	const handleColorEdit = async (colorHex, id) => {
 		if (color !== colorHex) {
-			await axios.put(`activities/${id}`, {
+			await axios.put(`/api/activities/${id}`, {
 				color: colorHex,
 				name
 			}).then(response => {

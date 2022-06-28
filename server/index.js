@@ -17,19 +17,19 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-app.get('/activities', db.getActivities)
-app.get('/activities/:id', db.getActivityById)
-app.post('/activities', db.createActivity)
-app.put('/activities/:id', db.updateActivity)
-app.delete('/activities/:id', db.removeActivity)
+app.get('/api/activities', db.getActivities)
+app.get('/api/activities/:id', db.getActivityById)
+app.post('/api/activities', db.createActivity)
+app.put('/api/activities/:id', db.updateActivity)
+app.delete('/api/activities/:id', db.removeActivity)
 
-app.get('/events', db.getEvents)
-app.post('/events', db.submitEvent)
+app.get('/api/events', db.getEvents)
+app.post('/api/events', db.submitEvent)
 
-app.post('/login', db.loginUser)
-app.post('/register', db.registerUser)
+app.post('/api/login', db.loginUser)
+app.post('/api/register', db.registerUser)
 
-app.get('/*', (request, response) => {
+app.get('/api/*', (request, response) => {
 	if (process.env.NODE_ENV === 'production') {
 		response.sendFile(path.join(__dirname, '../client/build/index.html'))
 	}

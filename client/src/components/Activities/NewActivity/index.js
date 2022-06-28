@@ -12,13 +12,13 @@ const NewActivity = ({ windowWidth }) => {
 	const dispatch = useDispatch()
 	const { user } = useSelector(userSelector)
 	const [ name, setName ] = useState('')
-	const [ color, setColor ] = useState('')
+	const [ color, setColor ] = useState('#F1F5F9')
 	const [ isColorPickerVisible, setColorPickerVisibility ] = useState(false)
 
 	const handleSubmit = async event => {
 		event.preventDefault()
 
-		await axios.post('activities', {
+		await axios.post('/api/activities', {
 			name,
 			date: new Date().toISOString().slice(0, 10),
 			color,
@@ -51,13 +51,12 @@ const NewActivity = ({ windowWidth }) => {
 					autoComplete='off'
 					className={style.input}
 					>
-					<TextField label='Name' variant='outlined' value={name} onChange={event => setName(event.target.value)} />
+					<TextField label='Name' variant='outlined' value={name} onChange={event => setName(event.target.value)} required />
 				</Box>
 				{windowWidth <= 500
 					? <IconButton color='primary' aria-label='Add activity' component='span' type='submit'><AddIcon /></IconButton>
 					: <Button variant='contained' type='submit'>Submit</Button>
 				}
-				
 			</form>
 		</>
 	)

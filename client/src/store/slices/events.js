@@ -62,6 +62,7 @@ const mergeEventsByDate = (payload, overall = false) => {
 
 	for (let id of uniqueIds) {
 		let eventsWithCurrentId = []
+
 		for (let event of payload) {
 			if (id === event.activity_id) {
 				eventsWithCurrentId.push(event)
@@ -70,12 +71,19 @@ const mergeEventsByDate = (payload, overall = false) => {
 		
 		const uniqueDates = [...new Set(eventsWithCurrentId.map(event => event.date_logged))]
 		let durationsLogged = []
+
 		for (let date of uniqueDates) {
 			let timeSpent = eventsWithCurrentId.reduce((totalTime, event) => date === event.date_logged ? totalTime + event.time_spent : totalTime + 0, 0)
 			durationsLogged.push({date: date.slice(0, 10), time: timeSpent})
 		}
 
 		let timeline = []
+
+		if (days.length === 1) {
+			const additionalPrecedingDay = new Date(new Date(uniqueDates[0]) - 86400000).toISOString().slice(0, 10)
+			days.unshift(additionalPrecedingDay)
+		}
+
 		for (let day of days) {
 			let appended = false
 
@@ -108,7 +116,7 @@ export function fetchEvents(userId) {
 		dispatch(getEvents())
 
 		try {
-			const response = await axios.get('events', {
+			const response = await axios.get('/api/events', {
 				params: {
 					userId
 				}

@@ -11,6 +11,8 @@ const ChartWrapper = ({overall = false}) => {
 	const { events, chartData, overallChartData } = useSelector(eventsSelector)
 
 	const xAxisPeriod = () => {
+		if (events.length === 1 && overall === true) return getDays(1, true).map(date => moment(date).format('Do of MMMM, YYYY'))
+
 		return overall 
 			? getOverall(events[events.length - 1], true).map(date => moment(date).format('Do of MMMM, YYYY')) 
 			: getDays(6, true).map(date => moment(date).format('Do of MMMM, YYYY'))
