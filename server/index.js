@@ -29,7 +29,7 @@ app.post('/api/events', db.submitEvent)
 app.post('/api/login', db.loginUser)
 app.post('/api/register', db.registerUser)
 
-app.get('/api/*', (request, response) => {
+app.get('/*', (request, response) => {
 	if (process.env.NODE_ENV === 'production') {
 		response.sendFile(path.join(__dirname, '../client/build/index.html'))
 	}
