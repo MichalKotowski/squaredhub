@@ -10,20 +10,20 @@ export const formatTime = time => {
 	return `${getHours}:${getMinutes}:${getSeconds}`
 }
 
-export const prettifyTime = duration => {   
-    let hours = ~~(duration / 3600)
-    let minutes = ~~((duration % 3600) / 60)
-    let seconds = ~~duration % 60
+export const prettifyTime = duration => {
+	let hours = ~~(duration / 3600)
+	let minutes = ~~((duration % 3600) / 60)
+	let seconds = ~~duration % 60
 	let time = ''
 
-    if (hours > 0) {
-        time += `${hours}h `
-    }
+	if (hours > 0) {
+		time += `${hours}h `
+	}
 
-    time += `${minutes}m `
-    time += `${seconds}s`
+	time += `${minutes}m `
+	time += `${seconds}s`
 
-    return time
+	return time
 }
 
 export const getDays = (periodInDays, entireDate = false) => {
@@ -42,7 +42,7 @@ export const getDays = (periodInDays, entireDate = false) => {
 	}
 
 	entireDate === false ? period.push(new Date().toISOString().slice(0, 10)) : period.push(new Date())
-	
+
 	return period
 }
 
@@ -51,11 +51,17 @@ export const secondsToHms = time => {
 	const minutes = Math.floor(+time % 3600 / 60)
 	const seconds = Math.floor(+time % 3600 % 60)
 
-	const hoursDisplay = hours > 0 ? hours + (hours === 1 ? ' hour, ' : ' hours, ') : ''
-	const minutesDisplay = minutes > 0 ? minutes + (minutes === 1 ? ' minute, ' : ' minutes, ') : ''
-	const secondsDisplay = seconds > 0 ? seconds + (seconds === 1 ? ' second' : ' seconds') : ''
+	const secondsDisplay = makeHumanReadable(seconds, 'second');
+	const minutesDisplay = makeHumanReadable(minutes, 'minute');
+	const hoursDisplay = makeHumanReadable(hours, 'hour');
 
-	return hoursDisplay + minutesDisplay + secondsDisplay
+	function makeHumanReadable(num, singular) {
+		return num > 0
+			? num + (num === 1 ? ` ${singular}, ` : ` ${singular}s, `)
+			: ''
+	}
+
+	return `${hoursDisplay}${minutesDisplay}${secondsDisplay}`.replace(/,\s*$/, '')
 }
 
 export const getOverall = (firstLoggedEvent, entireDate = false) => {

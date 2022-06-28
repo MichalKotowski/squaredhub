@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { eventsSelector } from '../../store/slices/events.js'
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination } from '@mui/material'
@@ -8,25 +8,9 @@ import style from './style.module.scss'
 
 const Events = () => {
 	const { events, loading, hasErrors } = useSelector(eventsSelector)
-	const [data, setData] = useState([])
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(10)
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0
-
-	const createEventObject = (id, color, name, date, time) => {
-		return { id, color, name, date, time }
-	}
-
-	const formatData = () => {
-		let eventsArray = []
-
-		events.forEach(event => {
-			const eventObject = createEventObject(event.id, event.color, event.name, event.date_logged.substring(0, 10), event.time_spent)
-			eventsArray.push(eventObject)
-		})
-
-		setData(eventsArray)
-	}
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - events.length) : 0
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage)
@@ -48,7 +32,7 @@ const Events = () => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{data
+					{events
 						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 						.map(event => (
 							<TableRow
@@ -59,7 +43,7 @@ const Events = () => {
 									<span className={style.circle} style={{ backgroundColor: event.color }}></span>{event.name}
 								</TableCell>
 								<TableCell align='right' width='30%'>{moment(event.date).format('Do of MMMM, YYYY')}</TableCell>
-								<TableCell align='right' width='40%'>{secondsToHms(event.time)}</TableCell>
+								<TableCell align='right' width='40%'>{secondsToHms(event.time_spent)}</TableCell>
 							</TableRow>
 						))
 					}
@@ -77,7 +61,7 @@ const Events = () => {
 					<TableRow>
 						<TablePagination
 							rowsPerPageOptions={[10, 25, 50]}
-							count={data.length}
+							count={events.length}
 							rowsPerPage={rowsPerPage}
 							page={page}
 							onPageChange={handleChangePage}
@@ -95,12 +79,6 @@ const Events = () => {
 		if (!events.length) return <Typography variant='body1' gutterBottom>There's no data to display yet</Typography>
 		return renderTable()
 	}
-
-	useEffect(() => {
-		if (!data.length && events.length) {
-			formatData()
-		}
-	}, [data])
 
 	return (
 		<>
