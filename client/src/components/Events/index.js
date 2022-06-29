@@ -42,7 +42,7 @@ const Events = () => {
 								<TableCell component='th' scope='row'>
 									<span className={style.circle} style={{ backgroundColor: event.color }}></span>{event.name}
 								</TableCell>
-								<TableCell align='right' width='30%'>{moment(event.date).format('Do of MMMM, YYYY')}</TableCell>
+								<TableCell align='right' width='30%'>{moment(event.date_logged).format('Do of MMMM, YYYY')}</TableCell>
 								<TableCell align='right' width='40%'>{secondsToHms(event.time_spent)}</TableCell>
 							</TableRow>
 						))
